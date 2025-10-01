@@ -2,7 +2,7 @@ name: Auto Sync Fork
 
 on:
   schedule:
-    - cron: '0 16 * * *'   # 每天北京时间 0 点执行 (UTC+8 → cron 要写 16点)
+    - cron: '0 16 * * *'   # 每天北京时间 0 点执行 (UTC+8 → cron 要写 16 点)
   workflow_dispatch:        # 支持手动触发
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
 
       - name: Add upstream
         run: |
-          git remote add upstream https://github.com/qist/v2rayfree.git || true
+          git remote add upstream https://github.com/free-nodes/v2rayfree.git || true
           git fetch upstream
 
       - name: Merge upstream changes
