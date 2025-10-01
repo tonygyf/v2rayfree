@@ -2,8 +2,8 @@ name: Auto Sync Fork
 
 on:
   schedule:
-    - cron: '0 16 * * *'   # 每天北京时间 0 点执行 (UTC+8 → cron 要写 16 点)
-  workflow_dispatch:        # 支持手动触发
+    - cron: '0 16 * * *'   # 每天北京时间 0 点执行（UTC 16 点）
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -13,23 +13,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # 必须完整历史，才能合并
+          fetch-depth: 0   # 需要完整历史记录，以便合并
 
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Add upstream
+      - name: Add upstream remote
         run: |
           git remote add upstream https://github.com/free-nodes/v2rayfree.git || true
           git fetch upstream
 
       - name: Merge upstream changes
         run: |
-          git checkout master
-          git merge upstream/master --no-edit || true
+          git checkout main
+          git merge upstream/main --no-edit || true
 
       - name: Push changes
         run: |
-          git push origin master
+          git push origin main
