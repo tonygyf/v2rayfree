@@ -1,0 +1,35 @@
+name: Auto Sync Fork
+
+on:
+  schedule:
+    - cron: '0 16 * * *'   # 每天北京时间 0 点执行 (UTC+8 → cron 要写 16点)
+  workflow_dispatch:        # 支持手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 必须完整历史，才能合并
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream
+        run: |
+          git remote add upstream https://github.com/qist/v2rayfree.git || true
+          git fetch upstream
+
+      - name: Merge upstream changes
+        run: |
+          git checkout master
+          git merge upstream/master --no-edit || true
+
+      - name: Push changes
+        run: |
+          git push origin master
