@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # 需要完整历史记录，以便合并
+          fetch-depth: 0
 
       - name: Configure Git
         run: |
@@ -25,11 +25,12 @@ jobs:
           git remote add upstream https://github.com/free-nodes/v2rayfree.git || true
           git fetch upstream
 
-      - name: Merge upstream changes
+      - name: Rebase onto upstream/main
         run: |
           git checkout main
-          git merge upstream/main --no-edit || true
+          git fetch upstream
+          git rebase upstream/main || (git rebase --abort && git reset --hard upstream/main)
 
-      - name: Push changes
+      - name: Force push to origin
         run: |
-          git push origin main
+          git push origin main --force
